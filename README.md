@@ -3,4 +3,4 @@ This repository contains instructions and explanation of how to hook up a servo 
 
 *Working code example:* **servo_example/servo_example.c**
 
-*Full library (soon avaible):* **servo_library/**
+*Full library (not working yet):* **servo_library/**

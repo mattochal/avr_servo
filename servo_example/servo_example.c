@@ -1,7 +1,15 @@
 /* servo_main.c
 
-Copyright Mateusz Ochal (mo4g15@soton.ac.uk)
-University of Southampton
+	Copyright Mateusz Ochal (mo4g15@soton.ac.uk)
+	University of Southampton
+
+
+This file shows an example of controlling a standard servo motor using PWM from AVR
+chip AT90USB1284.
+
+This solution is based on the LaFortuna board provided by University of Southampton,
+so assumes the presence of a roatary encoder, but you can use a potential divider 
+circuit and read an analogue signal from ports instead.
 
 Based on Task 1 Solution
 */
@@ -13,7 +21,7 @@ Based on Task 1 Solution
 | B    |   7 | Green LED                 |
 | E    |   4 | Rotary Encoder A          |
 | E    |   5 | Rotary Encoder B          |
-| D    |   0 | Servo					    |
+| D    |   0 | Servo					 |
 
 */
 
@@ -25,6 +33,7 @@ Based on Task 1 Solution
 
 #define MIN_STEP  25
 #define MAX_STEP  88
+#define COUNT 3
 
 
 void init(void);
@@ -42,10 +51,11 @@ void main(void) {
 	int16_t res;
 
 	init();
-	count = 3;
+	count = COUNT;
 	sei();
 
 	for (;;) {
+		/* ---- Delete if no rotary encoder -------- */
 		res = cnt + enc_delta();
 		if (res > MAX_STEP) {
 			cnt = MAX_STEP;
@@ -54,7 +64,9 @@ void main(void) {
 		} else {
 			cnt = res;
 		}
+		/* ---------------------------------------- */
 		OCR0A = cnt;
+
 	}
 }
 
@@ -68,19 +80,18 @@ void init(void) {
 	CLKPR = 0;
 
 	/* Configure I/O Ports */
-	DDRB  |=  _BV(PB7);   /* LED pin out */
 	DDRD  |=  _BV(PD0);   /* SERVO pin out */
-
-	PORTB &= ~_BV(PB7);   /* LED off */
 	PORTD &= ~_BV(PD0);   /* SERVO off */
 
+	/* ---- Delete if no rotary encoder --------*/
 	DDRE &= ~_BV(PE4) & ~_BV(PE5);  /* Rot. Encoder inputs */
 	PORTE |= _BV(PE4) | _BV(PE5);   /* Rot. Encoder pull-ups */
+	/* ---------------------------------------- */
 
 	TCCR0A = _BV(COM0A1) | _BV(WGM01) | _BV(WGM00); /* Fast PWD */
 	TCCR0B = _BV(CS02); /* FCPU/256 prescaler */
 
-	OCR0A = MIN_STEP;
+	OCR0A = MIN_STEP; // Changing this register between MIN_STEP and MAX_STEP will change the period of timer interrupts
 
 	TIMSK0 |= _BV(OCIE0A) | _BV(TOIE0); /* Enable timer and overflow interrupts, DS 14.8.6  */
 }
@@ -88,8 +99,7 @@ void init(void) {
 
 ISR( TIMER0_COMPA_vect ) {
 	cli();
-	if (count == 2) {
-		PORTB &= ~_BV(PB7);   /* LED off */
+	if (count == COUNT) {
 		PORTD &= ~_BV(PD0);   /* SERVO off */
 	}
 	sei();
@@ -113,16 +123,16 @@ ISR( TIMER0_OVF_vect ){
 		delta += (diff & 2) - 1;   /* bit 1 = direction (+/-) */
 	}
 
-	if (count == 0) {
-		PORTB |= _BV(PB7);   /* LED on  */
-		PORTD |= _BV(PD0);   /* SERVO on */
-		count = 3;
-	}
 	count--;
+
+	if (count == 0) {
+		PORTD |= _BV(PD0);   /* SERVO on */
+		count = COUNT;
+	}
 	sei();
 }
 
-
+/* ---- Delete if no rotary encoder --------*/
 /* read two step encoder */
 int8_t enc_delta() {
 	int8_t val;
@@ -134,3 +144,4 @@ int8_t enc_delta() {
 
 	return val >> 1;
 }
+/* ---------------------------------------- */
