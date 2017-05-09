@@ -1,7 +1,9 @@
 # avr_servo
 This library is based on AVR micro controller (AT90USB1286) or LaFortuna board provided by the University of Southampton.
 
-The library was designed to be scalable and can easily manage 8 servos but it could probably support up to 16 servos or more. It uses a timer and a output compare register to get a precise timing of the servos updating each one at a time. Since the pulses are triggered by interrupts it should be easy to implement multitasking.
+The library was designed to be scalable and can easily manage 8 servos but it could probably support up to 16 servos or more. (see **multiple_servos/** to see the example). It uses a timer and a output compare register to get a precise timing of the servos updating each one at a time. All of my examples use a prescaler of F_CPU\64 or F_CPU\256 with 8MHz clock speed, so there is an upper bound on the number of servos as the timing between pulses gets longer with more servos. 
+
+Since the pulses are triggered by interrupts it should be easy to implement multitasking. (see **os_with_servos/** to see an example)
 
 ## Understanding this repository
 
