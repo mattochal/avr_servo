@@ -16,3 +16,18 @@ This repository contains three seperate servo examples
 2. **multiple_servos/** (you guessed it) contains a more elaborate example of using multiple servos with one timer. It uses the servo library.
 
 3. **os_with_servos/** builds on the FortunaOS to take advantage of the rotary encoder to set positions of the servos, as well as containing a demo mode.
+
+### Compiling and running the examples
+For that you need the standard AVR development suite:
+AVR GCC compiler
+AVR C libraries
+DFU programmer
+
+If you're unsure heck out the AVR Toolchain Installation page.
+
+
+## Credit
+Many thanks to:
+* **Klaus Peter-Zauner** for providing the Universal Makefile used in the examples
+* **Steve Gunn** for the LCD library used in the examples
+* **Frank Vahid, Tony Givargis, and Bailey Miller. Univ. of California, Riverside and Irvine** for providing the RIOS
