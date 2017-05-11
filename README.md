@@ -19,12 +19,13 @@ This repository contains three seperate servo examples
 
 ### Compiling and running the examples
 For that you need the standard AVR development suite:
-AVR GCC compiler
-AVR C libraries
-DFU programmer
-
-If you're unsure heck out the AVR Toolchain Installation page.
-
+* AVR GCC compiler and AVR C libraries 
+  * For macOS : (https://www.obdev.at/products/crosspack/index.html "CrossPack for AVR development")
+  * For Windows : (https://sourceforge.net/projects/winavr/ "WinAVR")
+* DFU programmer
+  * get from (http://dfu-programmer.github.io/ "here")
+  
+Compile the examples with the Univeral Makefile, which are in each example folder and you should be good to go!
 
 ## Credit
 Many thanks to:
